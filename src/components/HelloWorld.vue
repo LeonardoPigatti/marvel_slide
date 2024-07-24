@@ -5,26 +5,29 @@
       <h2 style="z-index: 2;" class="h2 h2--top">I am</h2>
       <img style="z-index: 2; cursor: pointer;" @click="toggleDiv" class="slide__img" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/108082/groot.png" alt="Groot">
       <h2 style="z-index: 2;" class="h2 h2--bottom">Groot</h2>
-      <h2  v-if="isDivVisible" style="z-index: 2; top: 250px; font-size: 20px !important; margin-left: 50px; font-style: italic;"  class="h2 p--bottom">Come meet me</h2>
-      <div class="leo" v-if="isDivVisible">{{ Grootmessage }}</div>
+      <h2 v-if="isDivVisible" style="z-index: 2; top: 250px; font-size: 20px !important; margin-left: 50px; font-style: italic;" class="h2 p--bottom">Come meet me</h2>
+      <transition name="container">
+        <div v-if="isDivVisible" class="container">{{ Grootmessage }}</div>
+      </transition>
     </section>
     <section style="background-color: #935c44;" class="slider__slide slide slide--2">
       <h2 style="z-index: 2;" class="h2 h2--top">Rocket</h2>
       <img style="z-index: 2; cursor: pointer;" @click="toggleDiv" class="slide__img" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/108082/raccoon.png" alt="Raccoon">
       <h2 style="z-index: 2;" class="h2 h2--bottom">Raccoon</h2>
-      <h2  v-if="isDivVisible" style="z-index: 2; top: 250px; font-size: 20px !important; margin-left: 50px; font-style: italic;"  class="h2 p--bottom">Come meet me</h2>
-      <div class="leo" v-if="isDivVisible">{{ Racoonmessage }}</div>
-
+      <h2 v-if="isDivVisible" style="z-index: 2; top: 250px; font-size: 20px !important; margin-left: 50px; font-style: italic;" class="h2 p--bottom">Come meet me</h2>
+      <transition name="container">
+        <div v-if="isDivVisible" class="container">{{ Racoonmessage }}</div>
+      </transition>
     </section>
     <nav class="slider__navigation navigation">
-      <a @click="leoz" href="javascript:void(0);" class="navigation__item nav nav--1">
+      <a @click="containerVisible" href="javascript:void(0);" class="navigation__item nav nav--1">
         <div class="nav__border">
           <div style="background-color: #475A51;" class="img img--color-1">
             <img class="nav__img" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/108082/groot.png" alt="Groot">
           </div>
         </div>
       </a>
-      <a @click="leoz" style="background-color: #935c44;" href="javascript:void(0);" class="navigation__item nav nav--2">
+      <a @click="containerVisible" style="background-color: #935c44;" href="javascript:void(0);" class="navigation__item nav nav--2">
         <div class="nav__border">
           <div class="img img--color-2">
             <img class="nav__img" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/108082/raccoon.png" alt="Raccoon">
@@ -34,83 +37,82 @@
     </nav>
     <i class="bg-slide"></i>
   </article>
-  </template>
+</template>
+
   
-  <script>
-  import $ from 'jquery';
-  
-  export default {
-    name: 'HelloWorld',
-    props: {
-      msg: String
-    },
-    mounted() {
-      $(function() {
-        var slider = $('.slider');
-        var slide = $('.slide');
-        var nav = $('.nav');
-  
-        slide.each(function(index) {
-          var $this = $(this);
-          $this.attr('data-slide', index + 1);
-        });
-        
-        nav.each(function(index) {
-          var $this = $(this);
-          $this.attr('data-item', index + 1);
-        });
-        
-        nav.on('click', function(e) {
-          e.preventDefault();
-          
-          var $this = $(this);
-          var itemNav = $this.data('item');
-          var prevSlide = itemNav - 1;
-          var a, b;
-          
-          if (itemNav == 1) {
-            a = nav.length;
-            b = 1;
-          } else {
-            a = prevSlide;
-            b = itemNav;
-          }
-          slider.addClass('slider--back').delay(600).queue(function(){
-            $(this).removeClass('slider--active-'+a)
-              .addClass('slider--active-'+b)
-              .addClass('slider--delay')
-              .dequeue();
-          }).delay(400).queue(function() {
-            $(this).removeClass('slider--back')
+<script>
+import $ from 'jquery';
+
+export default {
+  name: 'HelloWorld',
+  props: {
+    msg: String
+  },
+  mounted() {
+    $(function() {
+      var slider = $('.slider');
+      var slide = $('.slide');
+      var nav = $('.nav');
+
+      slide.each(function(index) {
+        var $this = $(this);
+        $this.attr('data-slide', index + 1);
+      });
+
+      nav.each(function(index) {
+        var $this = $(this);
+        $this.attr('data-item', index + 1);
+      });
+
+      nav.on('click', function(e) {
+        e.preventDefault();
+
+        var $this = $(this);
+        var itemNav = $this.data('item');
+        var prevSlide = itemNav - 1;
+        var a, b;
+
+        if (itemNav == 1) {
+          a = nav.length;
+          b = 1;
+        } else {
+          a = prevSlide;
+          b = itemNav;
+        }
+        slider.addClass('slider--back').delay(600).queue(function(){
+          $(this).removeClass('slider--active-'+a)
+            .addClass('slider--active-'+b)
+            .addClass('slider--delay')
             .dequeue();
-          }).delay(400).queue(function(){
-            $(this).removeClass('slider--delay')
-            .dequeue();
-          });
+        }).delay(400).queue(function() {
+          $(this).removeClass('slider--back')
+          .dequeue();
+        }).delay(400).queue(function(){
+          $(this).removeClass('slider--delay')
+          .dequeue();
         });
       });
-    },
-  
-    data() {
-      return {
-        isDivVisible: false,
-        Grootmessage: 'Hailing from the Branch Worlds’ Planet X, Groot is part of a species called Groot, so his name is also the title of his taxonomic classification. From the time he was a sapling, Groot was destined to protect the rights of the downtrodden. He campaigned for the Undergrowth, anthropomorphic animals and fungi who helped maintain Planet X’s ecosystem by performing menial tasks. Groot’s noble campaign drew the rancor of the other Groots and he ended up leaving his home world.',
-        Racoonmessage: 'Imagine if your average raccoon suddenly gained a PhD in engineering and a penchant for sarcasm. That’s Rocket Raccoon for you. Hailing from the far-flung reaches of the Marvel universe, Rocket is a raccoon with a chip on his shoulder and a laser gun in his hand. He’s not just a raccoon; he’s a raccoon with a flair for intergalactic mischief and an uncanny knack for mechanics.',
-      };
-    },
-
-    methods: {
-      toggleDiv() {
-    this.isDivVisible = !this.isDivVisible;
-    const button = document.querySelector('.button-2');
-    button.classList.toggle('active');
+    });
   },
-  leoz() {
-    this.isDivVisible = false;
+
+  data() {
+    return {
+      isDivVisible: false,
+      Grootmessage: 'Hailing from the Branch Worlds’ Planet X, Groot is part of a species called Groot, so his name is also the title of his taxonomic classification. From the time he was a sapling, Groot was destined to protect the rights of the downtrodden. He campaigned for the Undergrowth, anthropomorphic animals and fungi who helped maintain Planet X’s ecosystem by performing menial tasks. Groot’s noble campaign drew the rancor of the other Groots and he ended up leaving his home world.',
+      Racoonmessage: 'Imagine if your average raccoon suddenly gained a PhD in engineering and a penchant for sarcasm. That’s Rocket Raccoon for you. Hailing from the far-flung reaches of the Marvel universe, Rocket is a raccoon with a chip on his shoulder and a laser gun in his hand. He’s not just a raccoon; he’s a raccoon with a flair for intergalactic mischief and an uncanny knack for mechanics.',
+    };
+  },
+
+  methods: {
+    toggleDiv() {
+      this.isDivVisible = !this.isDivVisible;
+    },
+    containerVisible() {
+      this.isDivVisible = false;
+    }
   }
-  }
-  }
-  </script>
+}
+</script>
     
   <style lang="scss" scoped>
   @import url("https://fonts.googleapis.com/css?family=Inconsolata:400,700");
@@ -158,30 +160,49 @@
     font-family: Inconsolata, serif;
     overflow: hidden;
   }
-  
-  
-  .leo {
-    height: 285px;
-    z-index: 2;
-    width: 80%;
-    max-width: 600px;
-    padding: 20px;
-    margin: 0 auto;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    font-family: "Montserrat", sans-serif;
-    font-size: 1.2em;
-    line-height: 1.6;
-    color: #fff;
-    text-align: justify;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    position: relative;
-    top: 50%;
-    transform: translateY(-70%) translateX(350px);
-    
+
+  @keyframes open-animation {
+  0% {
+    opacity: 0;
+    transform: scaleY(0);
   }
+  100% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+.container-enter-active, .container-leave-active {
+  transition: opacity 0.5s, transform 0.5s;
+}
+.container-enter, .container-leave-to  {
+  opacity: 0;
+  transform: scaleY(0);
+}
+
+.container {
+  height: 285px;
+  z-index: 2;
+  width: 80%;
+  max-width: 600px;
+  padding: 20px;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  font-family: "Montserrat", sans-serif;
+  font-size: 1.2em;
+  line-height: 1.6;
+  color: #fff;
+  text-align: justify;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  position: relative;
+  top: 50%;
+  transform-origin: top;
+  transform: translateY(-70%) translateX(350px);
+}
+
 
   .button-2 {
   position: relative;
